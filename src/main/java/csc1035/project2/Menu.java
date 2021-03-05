@@ -76,9 +76,11 @@ public class Menu {
                     break;
                 case 4:
                     //produce timetable
+                    RoomBooking.ProduceRoomTimetable(consoleReader);
                     break;
                 case 5:
                     //update room details
+                    RoomBooking.UpdateRoomDetails(consoleReader);
                     break;
                 case 6:
                     //return to main menu
