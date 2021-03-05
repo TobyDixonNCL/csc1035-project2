@@ -1,9 +1,12 @@
 package csc1035.project2;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
+
+/**
+ * This is a class which represents the Rooms table in the database. Objects of this class represent a row in the table.
+ * @author Adam Winstanley
+ */
 @Entity
 @Table(name = "Rooms")
 public class Rooms {
@@ -57,6 +60,7 @@ public class Rooms {
         this.socialDistancingCapacity = socialDistancingCapacity;
     }
 
+    // Temporary toString for debugging purposes, delete later.
     @Override
     public String toString() {
         return "Rooms{" +
