@@ -2,8 +2,10 @@ package csc1035.project2;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 
 import javax.persistence.PersistenceException;
+import javax.persistence.TypedQuery;
 import java.util.List;
 
 /**
@@ -103,7 +105,7 @@ public class Controller<E> implements IController<E> {
     /**
      * Reads all rows from the table which is represented by class c.
      * @param c The class which represents the table which is being read from.
-     * @return A list of objects represnting rows in the table `c`.
+     * @return A list of objects representing rows in the table `c`.
      */
     @Override
     public List<E> readAll(Class<E> c) {

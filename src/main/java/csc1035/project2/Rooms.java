@@ -1,22 +1,34 @@
 package csc1035.project2;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
- * This is a class which represents the Rooms table in the database. Objects of this class represent a row in the table.
+ * This is a class which represents the Rooms table in the database, it establishes a many to many relationship with the bookings class.
+ * Objects of this class represent a row in the table.
  * @author Adam Winstanley
  */
 @Entity
 @Table(name = "Rooms")
 public class Rooms {
+    // Constructors
+    public Rooms() {}
+
+    public Rooms(String roomID, String type, int maxCapacity, int socialDistancingCapacity) {
+        this.roomID = roomID;
+        this.type = type;
+        this.maxCapacity = maxCapacity;
+        this.socialDistancingCapacity = socialDistancingCapacity;
+    }
 
     // Set up the columns
     @Id
-    @Column(name = "RoomID")
+    @Column(name = "RoomID", length = 6)
     private String roomID;
 
-    @Column(name = "Type")
+    @Column(name = "Type", length = 30)
     private String type;
 
     @Column(name = "MaxCapacity")
@@ -25,13 +37,15 @@ public class Rooms {
     @Column(name = "SocialDistancingCapacity")
     private int socialDistancingCapacity;
 
-    // Getters and setters
+    // Relationships
+    @ManyToMany(mappedBy = "rooms")
+    private Set<Bookings> bookings = new HashSet<>();
 
+    // Getters and setters
     public void setRoomID(String RoomID) {
         this.roomID = RoomID;
     }
 
-    @Id
     public String getRoomID() {
         return roomID;
     }
@@ -60,14 +74,11 @@ public class Rooms {
         this.socialDistancingCapacity = socialDistancingCapacity;
     }
 
-    // Temporary toString for debugging purposes, delete later.
-    @Override
-    public String toString() {
-        return "Rooms{" +
-                "roomID='" + roomID + '\'' +
-                ", type='" + type + '\'' +
-                ", maxCapacity=" + maxCapacity +
-                ", socialDistancingCapacity=" + socialDistancingCapacity +
-                '}';
+    public Set<Bookings> getBookings() {
+        return bookings;
+    }
+
+    public void setBookings(Set<Bookings> bookings) {
+        this.bookings = bookings;
     }
 }
