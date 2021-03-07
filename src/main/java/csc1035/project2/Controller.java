@@ -2,10 +2,8 @@ package csc1035.project2;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.query.Query;
 
 import javax.persistence.PersistenceException;
-import javax.persistence.TypedQuery;
 import java.util.List;
 
 /**

@@ -2,6 +2,7 @@ package csc1035.project2;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 
@@ -38,7 +39,7 @@ public class Rooms {
     private int socialDistancingCapacity;
 
     // Relationships
-    @ManyToMany(mappedBy = "rooms")
+    @ManyToMany(mappedBy = "rooms", fetch = FetchType.EAGER)
     private Set<Bookings> bookings = new HashSet<>();
 
     // Getters and setters
@@ -80,5 +81,23 @@ public class Rooms {
 
     public void setBookings(Set<Bookings> bookings) {
         this.bookings = bookings;
+    }
+
+    // Methods
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Rooms rooms = (Rooms) o;
+        return maxCapacity == rooms.maxCapacity &&
+                socialDistancingCapacity == rooms.socialDistancingCapacity &&
+                roomID.equals(rooms.roomID) &&
+                type.equals(rooms.type);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(roomID, type, maxCapacity, socialDistancingCapacity);
     }
 }

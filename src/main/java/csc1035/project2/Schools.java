@@ -15,6 +15,18 @@ import java.util.Set;
 @Table(name = "Schools")
 public class Schools {
 
+    // Constructor
+    public Schools() { }
+
+    public Schools(String schoolID, Modules module, Set<Students> students, Set<Staff> staff) {
+        this.schoolID = schoolID;
+//        this.schoolID = module.getModuleID().substring(0,3) + "." + staff.size() + "." + "students.size";  // possible generated value?>
+        this.module = module;
+        this.students = students;
+        this.staff = staff;
+    }
+
+    // Columns
     @Id
     @Column(name = "SchoolID", length = 100)
     private String schoolID;

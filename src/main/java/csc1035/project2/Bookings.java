@@ -1,8 +1,7 @@
 package csc1035.project2;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,11 +17,13 @@ public class Bookings {
     // Constructors
     public Bookings() { }
 
-    public Bookings(String bookingID, boolean sociallyDistanced, LocalDateTime time, LocalTime duration) {
+    public Bookings(String bookingID, boolean sociallyDistanced, LocalDateTime time, LocalTime duration, Schools school, Set<Rooms> rooms) {
         this.bookingID = bookingID;
         this.sociallyDistanced = sociallyDistanced;
         this.time = time;
         this.duration = duration;
+        this.rooms = rooms;
+        this.school = school;
     }
 
     // Set up columns
@@ -45,7 +46,7 @@ public class Bookings {
     @JoinColumn(name = "SchoolID")
     private Schools school;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "BookingsRooms",
             joinColumns = {@JoinColumn(name = "BookingID")},
@@ -62,13 +63,6 @@ public class Bookings {
         return bookingID;
     }
 
-    public Schools getCls() {
-        return school;
-    }
-
-    public void setCls(Schools school) {
-        this.school = school;
-    }
 
     public boolean isSociallyDistanced() {
         return sociallyDistanced;
@@ -108,5 +102,23 @@ public class Bookings {
 
     public void setSchool(Schools school) {
         this.school = school;
+    }
+
+    public LocalDateTime getEnd() {
+        return time.plusHours(duration.getHour()).plusMinutes(duration.getMinute());
+    }
+
+    // Methods
+
+    /**
+     * Tests whether another booking conflicts with this booking.
+     * @param b the booking which is being checked against.
+     * @return false in the case that the booking does not share any rooms, or that the time does not conflict. True in any other case.
+     */
+    public boolean conflictsWith(Bookings b) {
+        if (rooms.stream().anyMatch(room -> b.getRooms().contains(room))) {
+            return time.isBefore(b.getEnd()) && getEnd().isAfter(b.getEnd()) || time.isEqual(b.getTime()) || time.isBefore(b.getTime()) && getEnd().isAfter(b.getTime());
+        }
+        return false;
     }
 }
