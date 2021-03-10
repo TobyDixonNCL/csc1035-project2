@@ -1,6 +1,7 @@
 package csc1035.project2;
 
 import javax.persistence.*;
+import java.util.Set;
 
 /**
  * This class represents the modules table in the database. It establishes a one to one relationship with the module requirements class and a one to many relationship with the school class.
@@ -39,6 +40,10 @@ public class Modules {
     @OneToOne
     @JoinColumn(name = "ModuleID", referencedColumnName = "ModuleID")
     private ModuleRequirements moduleRequirements;
+
+    @OneToMany(mappedBy = "module")
+    private Set<Schools> schools;
+
 
     // Getters and setters
     public void setModuleID(String moduleID) {
@@ -81,4 +86,11 @@ public class Modules {
         this.moduleRequirements = moduleRequirements;
     }
 
+    public Set<Schools> getSchools() {
+        return schools;
+    }
+
+    public void setSchools(Set<Schools> schools) {
+        this.schools = schools;
+    }
 }

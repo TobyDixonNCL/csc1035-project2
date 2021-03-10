@@ -46,7 +46,7 @@ public class Bookings {
     @JoinColumn(name = "SchoolID")
     private Schools school;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(
             name = "BookingsRooms",
             joinColumns = {@JoinColumn(name = "BookingID")},

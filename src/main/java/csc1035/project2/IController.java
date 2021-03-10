@@ -14,7 +14,11 @@ public interface IController<E>  {
 
     E readById(Class<E> c, String id);
 
+    E readById(Class<E> c, String id, boolean eager);
+
     List<E> readAll(Class<E> c);
+
+    List<E> readAll(Class<E> c, boolean eager);
 
     void delete(Class<E> c, String id);
 }

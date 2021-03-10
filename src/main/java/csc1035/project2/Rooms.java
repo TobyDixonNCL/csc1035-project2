@@ -39,7 +39,7 @@ public class Rooms {
     private int socialDistancingCapacity;
 
     // Relationships
-    @ManyToMany(mappedBy = "rooms", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "rooms")
     private Set<Bookings> bookings = new HashSet<>();
 
     // Getters and setters

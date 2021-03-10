@@ -33,7 +33,7 @@ public class Staff {
 
     // Relationships
     @ManyToMany(mappedBy="staff")
-    private Set<Schools> school;
+    private Set<Schools> schools;
 
     // Getters and setters
     public String getStaffID() {
@@ -61,10 +61,10 @@ public class Staff {
     }
 
     public Set<Schools> getSchool() {
-        return school;
+        return schools;
     }
 
     public void setSchool(Set<Schools> school) {
-        this.school = school;
+        this.schools = school;
     }
 }
