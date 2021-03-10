@@ -168,6 +168,9 @@ public class Controller<E> implements IController<E> {
             if (s != null) s.getTransaction().rollback();
             exception.printStackTrace();
         }
+        catch (NoResultException exception) {
+            System.out.println("That is not a valid ID.");
+        }
         finally {
             // Close the session
             if (s != null) s.close();

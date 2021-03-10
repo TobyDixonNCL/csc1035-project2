@@ -34,7 +34,7 @@ public class Students {
 
     // Relationships
     @ManyToMany(mappedBy = "students")
-    private Set<Schools> schools = new HashSet<>();
+    private Set<Bookings> bookings = new HashSet<>();
 
     // Getters and setters
     public void setStudentID(String studentID) {
@@ -61,11 +61,11 @@ public class Students {
         this.surname = surname;
     }
 
-    public Set<Schools> getSchools() {
-        return schools;
+    public Set<Bookings> getBookings() {
+        return bookings;
     }
 
-    public void setSchools(Set<Schools> schools) {
-        this.schools = schools;
+    public void setBookings(Set<Bookings> bookings) {
+        this.bookings = bookings;
     }
 }

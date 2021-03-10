@@ -42,7 +42,7 @@ public class Modules {
     private ModuleRequirements moduleRequirements;
 
     @OneToMany(mappedBy = "module")
-    private Set<Schools> schools;
+    private Set<Bookings> schools;
 
 
     // Getters and setters
@@ -86,11 +86,11 @@ public class Modules {
         this.moduleRequirements = moduleRequirements;
     }
 
-    public Set<Schools> getSchools() {
+    public Set<Bookings> getSchools() {
         return schools;
     }
 
-    public void setSchools(Set<Schools> schools) {
+    public void setSchools(Set<Bookings> schools) {
         this.schools = schools;
     }
 }
