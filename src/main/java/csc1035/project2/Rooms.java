@@ -1,6 +1,7 @@
 package csc1035.project2;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -83,8 +84,21 @@ public class Rooms {
         this.bookings = bookings;
     }
 
-    // Methods
+    /**
+     * This method checks whether a room is booked at a given time.
+     * @param from the beginning of the period of time being checked.
+     * @param to the end of the period of time being checked.
+     * @return true if the room is available in the given time frame, false if otherwise.
+     */
+    public boolean isAvailable(LocalDateTime from, LocalDateTime to) {
+        for (Bookings booking : bookings) {
+            if ((from.isBefore(booking.getEnd()) || from.isEqual(booking.getEnd())) && (to.isEqual(booking.getTime()) || to.isAfter(booking.getTime())))
+                return false;
+        }
+        return true;
+    }
 
+    // Methods
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

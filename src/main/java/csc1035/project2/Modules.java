@@ -1,6 +1,7 @@
 package csc1035.project2;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -42,7 +43,23 @@ public class Modules {
     private ModuleRequirements moduleRequirements;
 
     @OneToMany(mappedBy = "module")
-    private Set<Bookings> schools;
+    private Set<Bookings> bookings;
+
+    @ManyToMany
+    @JoinTable(
+            name = "StudentModules",
+            joinColumns = {@JoinColumn(name = "ModuleID")},
+            inverseJoinColumns = {@JoinColumn(name = "StudentID")}
+    )
+    private Set<Students> students = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "StaffModules",
+            joinColumns = {@JoinColumn(name = "ModuleID")},
+            inverseJoinColumns = {@JoinColumn(name = "StaffID")}
+    )
+    private Set<Staff> staff = new HashSet<>();
 
 
     // Getters and setters
@@ -86,11 +103,27 @@ public class Modules {
         this.moduleRequirements = moduleRequirements;
     }
 
-    public Set<Bookings> getSchools() {
-        return schools;
+    public Set<Bookings> getBookings() {
+        return bookings;
     }
 
-    public void setSchools(Set<Bookings> schools) {
-        this.schools = schools;
+    public void setBookings(Set<Bookings> bookings) {
+        this.bookings = bookings;
+    }
+
+    public Set<Students> getStudents() {
+        return students;
+    }
+
+    public void setStudents(Set<Students> students) {
+        this.students = students;
+    }
+
+    public Set<Staff> getStaff() {
+        return staff;
+    }
+
+    public void setStaff(Set<Staff> staff) {
+        this.staff = staff;
     }
 }

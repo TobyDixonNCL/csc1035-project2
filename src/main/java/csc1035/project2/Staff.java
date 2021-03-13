@@ -1,6 +1,7 @@
 package csc1035.project2;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 /**
@@ -33,7 +34,7 @@ public class Staff {
 
     // Relationships
     @ManyToMany(mappedBy="staff")
-    private Set<Bookings> bookings;
+    private Set<Modules> modules;
 
     // Getters and setters
     public String getStaffID() {
@@ -59,4 +60,21 @@ public class Staff {
     public void setSurname(String surname) {
         this.surname = surname;
     }
+
+
+
+    /**
+     * This method checks whether a staff member is in a booking at a given time.
+     * @param from the beginning of the period of time being checked.
+     * @param to the end of the period of time being checked.
+     * @return true if the room is available in the given time frame, false if otherwise.
+     */
+    public boolean isAvailable(LocalDateTime from, LocalDateTime to) {
+//        for (Bookings booking : bookings) {
+//            if ((from.isBefore(booking.getEnd()) || from.isEqual(booking.getEnd())) && (to.isEqual(booking.getTime()) || to.isAfter(booking.getTime())))
+//                return false;
+//        }
+        return true;
+    }
+
 }

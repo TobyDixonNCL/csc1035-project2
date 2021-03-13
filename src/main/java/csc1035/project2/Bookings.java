@@ -2,6 +2,7 @@ package csc1035.project2;
 
 import javax.persistence.*;
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,13 +18,11 @@ public class Bookings {
     // Constructors
     public Bookings() { }
 
-    public Bookings(String bookingID, boolean sociallyDistanced, LocalDateTime time, LocalTime duration, Set<Students> students, Set<Staff> staff, Modules module, Rooms rooms) {
-        this.bookingID = bookingID;
+    public Bookings(boolean sociallyDistanced, LocalDateTime time, LocalTime duration, Modules module, Rooms rooms) {
+        this.bookingID = module.getModuleID() + "." + rooms.getRoomID() + "." + time.format(DateTimeFormatter.ofPattern("yyyyMMdd_hhmm"));
         this.sociallyDistanced = sociallyDistanced;
         this.time = time;
         this.duration = duration;
-        this.students = students;
-        this.staff = staff;
         this.module = module;
         this.rooms = rooms;
     }
@@ -44,22 +43,6 @@ public class Bookings {
 
 
     // Relationships
-    @ManyToMany
-    @JoinTable(
-            name = "StudentTimetable",
-            joinColumns = {@JoinColumn(name = "BookingID")},
-            inverseJoinColumns = {@JoinColumn(name = "StudentID")}
-    )
-    private Set<Students> students = new HashSet<>();
-
-    @ManyToMany
-    @JoinTable(
-            name = "StaffTimetable",
-            joinColumns = {@JoinColumn(name = "BookingID")},
-            inverseJoinColumns = {@JoinColumn(name = "StaffID")}
-    )
-    private Set<Staff> staff = new HashSet<>();
-
     @ManyToOne
     @JoinColumn(name = "ModuleID")
     private Modules module;
@@ -118,21 +101,6 @@ public class Bookings {
         this.rooms = rooms;
     }
 
-    public Set<Students> getStudents() {
-        return students;
-    }
-
-    public void setStudents(Set<Students> students) {
-        this.students = students;
-    }
-
-    public Set<Staff> getStaff() {
-        return staff;
-    }
-
-    public void setStaff(Set<Staff> staff) {
-        this.staff = staff;
-    }
 
     public LocalDateTime getEnd() {
         return time.plusHours(duration.getHour()).plusMinutes(duration.getMinute());
