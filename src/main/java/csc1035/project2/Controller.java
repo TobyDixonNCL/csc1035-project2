@@ -16,7 +16,6 @@ import java.util.*;
  * This class is a generic controller for the table classes.
  * @see <a href="https://nucode.ncl.ac.uk/scomp/stage1/csc1035/code-examples/part-2/csc1035-hibernate-examples/blob/master/src/main/java/controller/Controller.java">(Uses code from this lecture, Jordan Barnes, 2020)</a>
  * @param <E> The hibernate class which is being interacted with.
- * @author Adam Winstanley
  */
 public class Controller<E> implements IController<E> {
     private Session s = null;
