@@ -10,7 +10,6 @@ import java.util.Set;
 /**
  * This is a class which represents the Rooms table in the database, it establishes a many to many relationship with the bookings class.
  * Objects of this class represent a row in the table.
- * @author Adam Winstanley
  */
 @Entity
 @Table(name = "Rooms")
