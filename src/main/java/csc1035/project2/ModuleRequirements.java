@@ -8,7 +8,6 @@ import java.time.LocalTime;
 /**
  * This class represents the module requirements table in the database. It establishes a one to one relationship with the modules class.
  * Objects of this class represent a row in the table.
- * @author Adam Winstanley
  */
 @Entity
 @Table(name = "ModuleRequirements")
