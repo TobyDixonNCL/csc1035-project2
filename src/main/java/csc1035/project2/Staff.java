@@ -7,7 +7,6 @@ import java.util.Set;
 /**
  * This class represents the Staff table in the database, it establishes a many to many relationship to the School table.
  * Objects of this class represent a row in the table.
- * @author Adam Winstanley
  */
 @Entity
 @Table(name = "Staff")
