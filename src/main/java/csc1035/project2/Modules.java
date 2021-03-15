@@ -7,7 +7,6 @@ import java.util.Set;
 /**
  * This class represents the modules table in the database. It establishes a one to one relationship with the module requirements class and a one to many relationship with the school class.
  * Objects of this class represent a row in the table.
- * @author Adam Winstanley
  */
 @Entity
 @Table(name = "Modules")
