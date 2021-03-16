@@ -2,7 +2,7 @@ package csc1035.project2;
 
 import javax.persistence.*;
 
-@Entity(name = "ROOMS")
+@Entity(name = "Rooms")
 public class RoomDetails {
 
     //create variables
