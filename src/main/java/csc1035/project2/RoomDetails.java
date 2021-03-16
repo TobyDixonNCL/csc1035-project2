@@ -1,11 +1,22 @@
 package csc1035.project2;
 
+import javax.persistence.*;
+
+@Entity(name = "ROOMS")
 public class RoomDetails {
 
     //create variables
+    @Id
+    @Column(updatable = false, nullable = false)
     private String roomID;
+
+    @Column
     private int maxCapacity;
+
+    @Column
     private int socialDistancingCapacity;
+
+    @Column
     private String type;
 
     //declare class
