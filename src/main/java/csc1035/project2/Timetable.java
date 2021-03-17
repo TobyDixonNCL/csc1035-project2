@@ -15,6 +15,10 @@ package csc1035.project2;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
+import java.sql.Time;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class Timetable {
 
@@ -26,7 +30,7 @@ public class Timetable {
         this.bookings = bookings;
     }
 
-    public void getStudentTimetable(Student student){
+    public Timetable getStudentTimetable(Student student){
 
         /*
         Get modules
@@ -44,11 +48,22 @@ public class Timetable {
         Session s = HibernateUtil.getSessionFactory().openSession();
         s.beginTransaction();
 
-        Query query = s.createSQLQuery("select ModuleID from StudentModules where StudentID = :student_id");
-        query.setParameter("student_id", student.getId());
+        Query moduleQuery = s.createSQLQuery("select ModuleID from StudentModules where StudentID = :student_id");
+        moduleQuery.setParameter("student_id", student.getID());
+        List modules = moduleQuery.list();
 
+        List<Bookings> bookings = new ArrayList<>();
 
+        for (Object module: modules) {
+            Query bookingQuery = s.createSQLQuery("select * from Bookings where ModuleID = :module_id");
+            bookingQuery.setParameter("module_id", module);
+            List<Bookings> moduleBooking = bookingQuery.list();
+            for (Bookings b: moduleBooking){
+                bookings.add(b);
+            }
+        }
 
+        return new Timetable(false, bookings);
 
     }
 
