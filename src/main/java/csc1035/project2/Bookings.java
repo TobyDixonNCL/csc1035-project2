@@ -118,4 +118,14 @@ public class Bookings {
         }
         return false;
     }
+
+    /**
+     *Method to format the data for proper use in the confirmation
+     * @Author Jake Wilson
+     */
+    //Formats all the information so it is ready to be returned in an easily readable way
+    public String confirmation() {
+        String f = "BookingID: " + this.getBookingID() + "\nTime: " + this.getTime() + "\nDuration: " + this.getDuration();
+        return f;
+    }
 }
