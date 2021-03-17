@@ -2,13 +2,18 @@ package csc1035.project2;
 
 import java.sql.Time;
 
+/**
+ * This class is for the confirmation and is used for proper formatting of the confirmation
+ * @Author Jake Wilson
+ */
+
 public class Confirmation {
     private String bookingID;
-    private Time time;
+    private String time;
     private String duration;
     private String roomID;
 
-    public Confirmation(String bookingID, Time time, String duration, String roomID) {
+    public Confirmation(String bookingID, String time, String duration, String roomID) {
         this.bookingID = bookingID;
         this.time = time;
         this.duration = duration;
@@ -19,7 +24,7 @@ public class Confirmation {
         return bookingID;
     }
 
-    public Time getTime() {
+    public String getTime() {
         return time;
     }
 
@@ -32,4 +37,9 @@ public class Confirmation {
     }
 
 
+    //Formats all the information so it is ready to be returned in an easily readable way
+    public String format() {
+        String f = "BookingID: " + this.getBookingID() + "\nTime: " + this.getTime() + "\nDuration: " + this.getDuration() + "\nRoomID: " + this.getRoomID();
+        return f;
+    }
 }
