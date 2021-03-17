@@ -43,8 +43,13 @@ public class Timetable {
          */
         Session s = HibernateUtil.getSessionFactory().openSession();
         s.beginTransaction();
-        Query query = s.createSQLQuery("select * from Students where StudentID = :student_id");
+
+        Query query = s.createSQLQuery("select ModuleID from StudentModules where StudentID = :student_id");
         query.setParameter("student_id", student.getId());
+
+
+
+
     }
 
     public void getStaffTimetable(Staff staff){
