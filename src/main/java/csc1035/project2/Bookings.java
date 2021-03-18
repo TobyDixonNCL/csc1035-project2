@@ -125,7 +125,7 @@ public class Bookings {
      */
     //Formats all the information so it is ready to be returned in an easily readable way
     public String confirmation() {
-        String f = "BookingID: " + this.getBookingID() + "\nTime: " + this.getTime() + "\nDuration: " + this.getDuration();
+        String f = "BookingID: " + this.getBookingID() + "\nTime: " + this.getTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) + "\nDuration: " + this.getDuration();
         return f;
     }
 }
