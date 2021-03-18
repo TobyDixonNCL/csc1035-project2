@@ -1,84 +1,131 @@
 package csc1035.project2;
 
 import javax.persistence.*;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
+import java.util.Set;
 
-@Entity(name = "Bookings")
+/**
+ * This class represents the bookings table in the database. It establishes a many to many relationship with the rooms class, as well as a many to one relationship with the school class.
+ * Objects of this class represent a row in the table.
+ */
+@Entity
+@Table(name = "Bookings")
 public class Bookings {
 
-    //create variables
+    // Constructors
+    public Bookings() { }
+
+    public Bookings(boolean sociallyDistanced, LocalDateTime time, LocalTime duration, Modules module, Rooms rooms) {
+        this.bookingID = module.getModuleID() + "." + rooms.getRoomID() + "." + time.format(DateTimeFormatter.ofPattern("yyyyMMdd_hhmm"));
+        this.sociallyDistanced = sociallyDistanced;
+        this.time = time;
+        this.duration = duration;
+        this.module = module;
+        this.rooms = rooms;
+    }
+
+    // Set up columns
     @Id
-    @Column(updatable = false, nullable = false)
-    private String BookingID;
+    @Column(name = "BookingID", length = 100)
+    private String bookingID;
 
-    @Column
-    private String Duration;
+    @Column(name = "SociallyDistanced")
+    private boolean sociallyDistanced;
 
-    @Column
-    private String ModuleID;
+    @Column(name = "Time")
+    private LocalDateTime time;
 
-    @Column
-    private String RoomID;
+    @Column(name = "Duration")
+    private LocalTime duration;
 
-    @Column
-    private String SociallyDistanced;
 
-    @Column
-    private String Time;
+    // Relationships
+    @ManyToOne
+    @JoinColumn(name = "ModuleID")
+    private Modules module;
 
-    public Bookings(String bookingID, String duration, String moduleID, String roomID, String sociallyDistanced, String time) {
-        BookingID = bookingID;
-        Duration = duration;
-        ModuleID = moduleID;
-        RoomID = roomID;
-        SociallyDistanced = sociallyDistanced;
-        Time = time;
+    @ManyToOne
+    @JoinColumn(name = "RoomID")
+    private Rooms rooms;
+
+
+    public void setBookingID(String bookingID) {
+        this.bookingID = bookingID;
     }
 
     public String getBookingID() {
-        return BookingID;
+        return bookingID;
     }
 
-    public void setBookingID(String bookingID) {
-        BookingID = bookingID;
+
+    public boolean isSociallyDistanced() {
+        return sociallyDistanced;
     }
 
-    public String getDuration() {
-        return Duration;
+    public void setSociallyDistanced(boolean sociallyDistanced) {
+        this.sociallyDistanced = sociallyDistanced;
     }
 
-    public void setDuration(String duration) {
-        Duration = duration;
+    public LocalDateTime getTime() {
+        return time;
     }
 
-    public String getModuleID() {
-        return ModuleID;
+    public void setTime(LocalDateTime time) {
+        this.time = time;
     }
 
-    public void setModuleID(String moduleID) {
-        ModuleID = moduleID;
+    public LocalTime getDuration() {
+        return duration;
     }
 
-    public String getRoomID() {
-        return RoomID;
+    public void setDuration(LocalTime duration) {
+        this.duration = duration;
     }
 
-    public void setRoomID(String roomID) {
-        RoomID = roomID;
+    public Modules getModule() {
+        return module;
     }
 
-    public String getSociallyDistanced() {
-        return SociallyDistanced;
+    public void setModule(Modules module) {
+        this.module = module;
     }
 
-    public void setSociallyDistanced(String sociallyDistanced) {
-        SociallyDistanced = sociallyDistanced;
+    public Rooms getRooms() {
+        return rooms;
     }
 
-    public String getTime() {
-        return Time;
+    public void setRooms(Rooms rooms) {
+        this.rooms = rooms;
     }
 
-    public void setTime(String time) {
-        Time = time;
+
+    public LocalDateTime getEnd() {
+        return time.plusHours(duration.getHour()).plusMinutes(duration.getMinute());
+    }
+
+    // Methods
+
+    /**
+     * Tests whether another booking conflicts with this booking.
+     * @param b the booking which is being checked against.
+     * @return false in the case that the booking does not share any rooms, or that the time does not conflict. True in any other case.
+     */
+    public boolean conflictsWith(Bookings b) {
+        if (rooms == b.getRooms()) {
+            return time.isBefore(b.getEnd()) && getEnd().isAfter(b.getEnd()) || time.isEqual(b.getTime()) || time.isBefore(b.getTime()) && getEnd().isAfter(b.getTime());
+        }
+        return false;
+    }
+
+    /**
+     *Method to format the data for proper use in the confirmation
+     * @Author Jake Wilson
+     */
+    //Formats all the information so it is ready to be returned in an easily readable way
+    public String confirmation() {
+        String f = "BookingID: " + this.getBookingID() + "\nTime: " + this.getTime() + "\nDuration: " + this.getDuration();
+        return f;
     }
 }
