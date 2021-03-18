@@ -139,7 +139,13 @@ public class BookingIO {
                 time = time.plusDays(7);
             }
 
-            addBookings(newBookings);
+            // Attempt to add the new bookings
+            try {
+                addBookings(newBookings);
+            } catch (Exception e) {
+                // Tell the user what went wrong.
+                System.out.println(e.getMessage());
+            }
         }
     }
 
