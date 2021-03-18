@@ -10,9 +10,9 @@ import java.util.List;
 
 public class RoomBooking {
 
-    public static List<RoomDetails> GetRoomList() {
+    public static List<Rooms> GetRoomList() {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        List<RoomDetails> roomList = new ArrayList<>();
+        List<Rooms> roomList = new ArrayList<>();
         session.beginTransaction();
 
         try {
@@ -20,7 +20,7 @@ public class RoomBooking {
             //create list of rooms
             List dbRooms = session.createQuery("FROM Rooms").list();
 
-            //parses database records as RoomDetails objects and adds them to the room list.
+            //parses database records as Rooms objects and adds them to the room list.
             roomList.addAll(dbRooms);
 
 
@@ -45,7 +45,7 @@ public class RoomBooking {
             //create list of bookings
             List dbBookings = session.createQuery("FROM Bookings").list();
 
-            //parses database records as RoomDetails objects and adds them to the room list.
+            //parses database records as Bookings objects and adds them to the room list.
             bookingList.addAll(dbBookings);
 
 
@@ -64,13 +64,13 @@ public class RoomBooking {
     //Make a list of every booking for a room and compile them together into a timetable
     public static void ProduceRoomTimetable(BufferedReader consoleReader) throws IOException {
 
-        List<RoomDetails> roomList = GetRoomList();
+        List<Rooms> roomList = GetRoomList();
 
         List<Bookings> bookingList = GetBookingList();
 
         //asks the user for a room to make the timetable for
         System.out.printf("%nChoose a room to get the timetable for:");
-        RoomDetails chosenRoom = ChooseRoom(consoleReader, roomList);
+        Rooms chosenRoom = ChooseRoom(consoleReader, roomList);
         //gets that room's ID
         String chosenID = chosenRoom.getRoomID();
 
@@ -87,7 +87,7 @@ public class RoomBooking {
 
     public static void UpdateRoomDetails(BufferedReader consoleReader) throws IOException {
 
-        List<RoomDetails> roomList = GetRoomList();
+        List<Rooms> roomList = GetRoomList();
 
         System.out.println("Input Room ID");
         String ID = consoleReader.readLine();
@@ -107,7 +107,7 @@ public class RoomBooking {
             session.beginTransaction();
 
             //get row with same ID from Rooms table
-            RoomDetails updateRoom = (session.get(RoomDetails.class, ID));
+            Rooms updateRoom = (session.get(Rooms.class, ID));
             //set the new values
             updateRoom.setMaxCapacity(maxNormal);
             updateRoom.setSocialDistancingCapacity(maxCovid);
@@ -125,11 +125,11 @@ public class RoomBooking {
 
     }
 
-    public static RoomDetails ChooseRoom(BufferedReader consoleReader, List<RoomDetails> roomList) throws IOException {
-        RoomDetails chosenRoom = null;
+    public static Rooms ChooseRoom(BufferedReader consoleReader, List<Rooms> roomList) throws IOException {
+        Rooms chosenRoom = null;
         //for each room in room list, print the room name and its position in the array
         int loop = 0;
-        for (RoomDetails x : roomList) {
+        for (Rooms x : roomList) {
             System.out.println(loop + ": " + x.getRoomID() + " " + x.getType());
             loop++;
         }
