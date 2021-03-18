@@ -39,7 +39,6 @@ public class BookingIO {
         Modules module;
         Rooms room;
         int numberOfBookingsPerWeek;
-        Bookings newBooking;
 
         // Get staff.
         staffMember = sic.readById(Staff.class, getStaff().getStaffID(), true); // initialize only the relationship that is needed.
@@ -48,8 +47,9 @@ public class BookingIO {
         Map<String, Modules> moduleMap = new HashMap<>();
         System.out.println("Module options");
         for (Modules m : staffMember.getModules()) {
-            System.out.println(" " + m.getModuleID() + ": " + m.getName());
-            if (!m.getBookings().isEmpty()) System.out.println(" (this booking already has bookings set up.)");
+            System.out.print(" " + m.getModuleID() + ": " + m.getName());
+            m = mic.readById(Modules.class, m.getModuleID(), true);
+            if (!m.getBookings().isEmpty()) System.out.println(" (this booking already has bookings set up.)\n");
             else System.out.println();
             moduleMap.put(m.getModuleID(), m);
         }
@@ -138,14 +138,8 @@ public class BookingIO {
 
                 time = time.plusDays(7);
             }
-            try {
-                addBookings(newBookings);
-                for (Bookings b : newBookings) {
-                    System.out.println(b.confirmation());
-                }
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
+
+            addBookings(newBookings);
         }
     }
 
@@ -236,7 +230,6 @@ public class BookingIO {
             // create a non-recurring booking.
             newBooking = new Bookings(sociallyDistanced, time, duration, module, room);
             addBooking(newBooking);
-            System.out.println(newBooking.confirmation());
         } catch (Exception e) {
             System.out.println("There was an error creating a booking on the date: " + time.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         }
@@ -280,7 +273,7 @@ public class BookingIO {
         Set<String> bookingSet = new HashSet<>();
         System.out.println("Bookings for this module you can delete.");
         for (Bookings b : module.getBookings()) {
-            System.out.println(" " + b.getBookingID() + ": " + b.getTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) + " in the room " + b.getRoom().getRoomID());
+            System.out.println(" " + b.getBookingID() + ": " + b.getTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) + " in the room " + b.getRooms().getRoomID());
             bookingSet.add(b.getBookingID());
         }
         String bookingKey = sc.next();
@@ -336,7 +329,7 @@ public class BookingIO {
         Set<String> bookingSet = new HashSet<>();
         System.out.println("Bookings for this module which will be deleted.");
         for (Bookings b : module.getBookings()) {
-            System.out.println(" " + b.getBookingID() + ": " + b.getTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) + " in the room " + b.getRoom().getRoomID());
+            System.out.println(" " + b.getBookingID() + ": " + b.getTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) + " in the room " + b.getRooms().getRoomID());
             bookingSet.add(b.getBookingID());
         }
 
@@ -465,11 +458,19 @@ public class BookingIO {
      * @param newBookings The list of bookings which are being added into the database.
      */
     private void addBookings(List<Bookings> newBookings) {
-        IController<Bookings> ic = new Controller<>();
+        IController<Bookings> bookingController = new Controller<>();
+        IController<Students> studentController = new Controller<>();
+        IController<Staff> staffController = new Controller<>();
+
+        // Get all bookings
+        List<Bookings> allBookings = bookingController.readAll(Bookings.class);
+
 
         // Check if any booking clashes.
+        int count = 0;
         for (Bookings b : newBookings) {
-            for (Bookings booking : ic.readAll(Bookings.class)) {
+            System.out.println("Checking availability of booking #" + count);
+            for (Bookings booking : allBookings) {
                 if (b.conflictsWith(booking)) {
                     throw new IllegalArgumentException("That booking conflicts with another booking.");
                 }
@@ -477,24 +478,30 @@ public class BookingIO {
 
             Modules relatedModule = b.getModule();
 
-            if (!b.getRoom().isAvailable(b.getTime(), b.getEnd())) {
+            if (!b.getRooms().isAvailable(b.getTime(), b.getEnd())) {
                 throw new IllegalArgumentException("That room is unavailable at the time (" + b.getTime() + ").");
             }
             for (Students student : relatedModule.getStudents()) {
+                student = studentController.readById(Students.class, student.getStudentID(), true);
                 if (!student.isAvailable(b.getTime(), b.getEnd())) {
-                    throw new IllegalArgumentException("A student is unavailable at this time. (" + student.getStudentID() + ")");
+                    throw new IllegalArgumentException("A student is unavailable at this time. [" + b.getTime() + "] (" + student.getStudentID() + ")");
                 }
             }
             for (Staff staff : relatedModule.getStaff()) {
+                staff = staffController.readById(Staff.class, staff.getStaffID(), true);
+
                 if (!staff.isAvailable(b.getTime(), b.getEnd())) {
-                    throw new IllegalArgumentException("A staff member is unavailable at this time. (" + staff.getStaffID() + ")");
+                    throw new IllegalArgumentException("A staff member is unavailable at this time. [" + b.getTime() + "] (" + staff.getStaffID() + ")");
                 }
             }
+
+            count++;
         }
 
         // Create the bookings
         for (Bookings b : newBookings) {
-            ic.create(b);
+            bookingController.create(b);
+            System.out.println(b.confirmation() + "\n");
         }
     }
 
@@ -515,7 +522,7 @@ public class BookingIO {
         Modules relatedModule = b.getModule();
 
         // Check whether the room is available at the given time.
-        if (!b.getRoom().isAvailable(b.getTime(), b.getEnd())) {
+        if (!b.getRooms().isAvailable(b.getTime(), b.getEnd())) {
             throw new IllegalArgumentException("That room is unavailable at this time.");
         }
         // Check whether the students are available at that time.
@@ -533,5 +540,6 @@ public class BookingIO {
 
         // Put the booking into the database.
         ic.create(b);
+        System.out.println(b.confirmation() + "\n");
     }
 }

@@ -6,16 +6,20 @@
 <hibernate-configuration>
     <session-factory>
         <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-        <property name="hibernate.connection.url">jdbc:mysql://cs-db.ncl.ac.uk/t1035t07</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:52186/t1035t07</property>
         <property name="hibernate.connection.username">t1035t07</property>
         <property name="hibernate.connection.password">BetsTorn.Sad</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</property>
-        <property name="show_sql">true</property>
+        <property name="show_sql">false</property>
         <property name="format_sql">true</property>
         <property name="hbm2ddl.auto">update </property>
 
-        <mapping class="csc1035.project2.CLASS" /> <!--- Add a new mapping class for a new table in the database -->
-        <mapping class="csc1035.project2.CLASS" />
+        <mapping class="csc1035.project2.Rooms" /> <!--- Add a new mapping class for a new table in the database -->
+        <mapping class="csc1035.project2.Bookings" />
+        <mapping class="csc1035.project2.Students" />
+        <mapping class="csc1035.project2.Staff" />
+        <mapping class="csc1035.project2.Modules" />
+        <mapping class="csc1035.project2.ModuleRequirements" />
 
     </session-factory>
 </hibernate-configuration>

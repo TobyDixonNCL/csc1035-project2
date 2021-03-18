@@ -1,8 +1,13 @@
 package csc1035.project2;
 
+import org.hibernate.Session;
+import org.hibernate.query.Query;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -76,18 +81,30 @@ public class Students {
      * @return true if the room is available in the given time frame, false if otherwise.
      */
     public boolean isAvailable(LocalDateTime from, LocalDateTime to) {
-        IController<Modules> mic = new Controller<>();
+        Session s = HibernateUtil.getSessionFactory().openSession();
 
-        // Get the modules for which the staff member teaches.
-        for (Modules module : modules) {
-            // Update relationships.
-            module = mic.readById(Modules.class, module.getModuleID(), true);
+        // Get all of the staff member's bookings
+        String sqlString = "SELECT b.time, b.duration FROM Students s INNER JOIN s.modules m INNER JOIN m.bookings b WHERE s.studentID = :studentID";
 
-            // Get the times at which the staff member is booked.
-            for (Bookings booking : module.getBookings()) {
-                if ((from.isBefore(booking.getEnd()) || from.isEqual(booking.getEnd())) && (to.isEqual(booking.getTime()) || to.isAfter(booking.getTime()))) {
-                    return false;
-                }
+        Query<?> q = s.createQuery(sqlString);
+        q.setParameter("studentID", studentID);
+        List<?> results = q.getResultList();
+
+        s.close();
+
+        LocalDateTime endTime;
+        LocalDateTime startTime;
+        LocalTime duration;
+        for (Object result : results) {
+            // Get the start time, duration, and end time from the query.
+            Object[] parts = (Object[]) result;
+            duration = (LocalTime)parts[1];
+            startTime = (LocalDateTime)parts[0];
+            endTime = startTime.plusHours(duration.getHour()).plusMinutes(duration.getMinute());
+
+            // Check if the timeframe provided conflicts
+            if ((from.isBefore(endTime) || from.isEqual(endTime)) && (to.isEqual(startTime) || to.isAfter(startTime))) {
+                return false;
             }
         }
         return true;

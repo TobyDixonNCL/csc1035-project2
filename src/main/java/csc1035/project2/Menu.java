@@ -3,10 +3,16 @@ package csc1035.project2;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class Menu {
     public static void main(String[] args) throws IOException {
+
+        // Disable hibernate's logging. (red connection messages are not shown)
+        Logger l = Logger.getLogger("org.hibernate");
+        l.setLevel(Level.SEVERE);
 
         //consoleReader is used to read what the user types into the console.
         //consoleReader is also passed to the other menus and methods just so we don't have to redeclare it every time.
@@ -61,6 +67,9 @@ public class Menu {
 
         System.out.printf("%nRoom Booking Menu%n1: Make a reservation%n2: Cancel a reservation%n3:Find available rooms");
         System.out.printf("%n4: Produce a timetable for a room%n5: Update room details%n6: Return to main menu.%n");
+        BookingIO bookingIO = new BookingIO();
+
+
         int choice = 0;
         while (choice != 6) {
             // regexChoice is used to check that the string is numbers only
@@ -77,9 +86,41 @@ public class Menu {
                 switch (choice) {
                     case 1:
                         //Make reservation
+                        System.out.println("Would you like to make reservations for an entire module's length, or an individual lesson?\n" +
+                                " 0: Entire module's length.\n" +
+                                " 1: An individual lesson.");
+                        String reservationType = consoleReader.readLine();
+                        while (!reservationType.matches("^[01]$")) {
+                            System.out.println("Please enter 0 or 1");
+                            reservationType = consoleReader.readLine();
+                        }
+
+                        // Create a reservation of the type which the user selects.
+                        if (reservationType.equals("0")) {
+                            bookingIO.smartBooking();
+                        }
+                        else if (reservationType.equals("1")) {
+                            bookingIO.manualBooking();
+                        }
                         break;
                     case 2:
                         //Cancel reservation
+                        System.out.println("Would you like to cancel an individual booking, or all bookings for a module?\n" +
+                                " 0: An individual booking.\n" +
+                                " 1: All bookings for a module.");
+                        String cancellationType = consoleReader.readLine();
+                        while (!cancellationType.matches("^[01]$")) {
+                            System.out.println("Please enter 0 or 1");
+                            cancellationType = consoleReader.readLine();
+                        }
+
+                        // Cancel a reservation based on the user's input
+                        if (cancellationType.equals("0")) {
+                            bookingIO.cancelBooking();
+                        }
+                        else if (cancellationType.equals("1")) {
+                            bookingIO.bulkCancelBookings();
+                        }
                         break;
                     case 3:
                         //Find available rooms
