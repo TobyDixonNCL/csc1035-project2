@@ -5,76 +5,27 @@ import org.hibernate.Session;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class RoomBooking {
-
-    public static List<Rooms> GetRoomList() {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        List<Rooms> roomList = new ArrayList<>();
-        session.beginTransaction();
-
-        try {
-            session = HibernateUtil.getSessionFactory().openSession();
-            //create list of rooms
-            List dbRooms = session.createQuery("FROM Rooms").list();
-
-            //parses database records as Rooms objects and adds them to the room list.
-            roomList.addAll(dbRooms);
-
-
-        } catch (HibernateException e) {
-            if (session != null) session.getTransaction().rollback();
-            e.printStackTrace();
-        } finally {
-            session.close();
-        }
-
-        return roomList;
-    }
-
-    public static List<Bookings> GetBookingList() {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        List<Bookings> bookingList = new ArrayList<>();
-
-        session.beginTransaction();
-
-        try {
-            session = HibernateUtil.getSessionFactory().openSession();
-            //create list of bookings
-            List dbBookings = session.createQuery("FROM Bookings").list();
-
-            //parses database records as Bookings objects and adds them to the room list.
-            bookingList.addAll(dbBookings);
-
-
-        } catch (HibernateException e) {
-            if (session != null) session.getTransaction().rollback();
-            e.printStackTrace();
-        } finally {
-            session.close();
-        }
-
-        return bookingList;
-    }
-
 
     //A way of producing a timetable for a room
     //Make a list of every booking for a room and compile them together into a timetable
     public static void ProduceRoomTimetable(BufferedReader consoleReader) throws IOException {
 
-        List<Rooms> roomList = GetRoomList();
+        IController<Rooms> roomController= new Controller<>();
+        List<Rooms> roomsList = roomController.readAll(Rooms.class);
 
-        List<Bookings> bookingList = GetBookingList();
+        IController<Bookings> bookingsController = new Controller<>();
+        List<Bookings> bookingsList = bookingsController.readAll(Bookings.class);
 
         //asks the user for a room to make the timetable for
         System.out.printf("%nChoose a room to get the timetable for:");
-        Rooms chosenRoom = ChooseRoom(consoleReader, roomList);
+        Rooms chosenRoom = ChooseRoom(consoleReader, roomsList);
         //gets that room's ID
         String chosenID = chosenRoom.getRoomID();
 
-        for (Bookings x : bookingList) {
+        for (Bookings x : bookingsList) {
             if (x.getBookingID().equals(chosenID))
             {
                 System.out.println("Booking " + x.getBookingID() + " on " + x.getTime() + " for " + x.getDuration());
@@ -87,8 +38,6 @@ public class RoomBooking {
 
     public static void UpdateRoomDetails(BufferedReader consoleReader) throws IOException {
 
-        List<Rooms> roomList = GetRoomList();
-
         System.out.println("Input Room ID");
         String ID = consoleReader.readLine();
         System.out.println("Input Room Max. Capacity");
@@ -97,8 +46,6 @@ public class RoomBooking {
         int maxCovid = Integer.parseInt(consoleReader.readLine());
         System.out.println("Input Room Description");
         String type = consoleReader.readLine();
-
-
 
         Session session = HibernateUtil.getSessionFactory().openSession();
 
