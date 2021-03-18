@@ -112,6 +112,8 @@ public class RoomBooking {
             updateRoom.setMaxCapacity(maxNormal);
             updateRoom.setSocialDistancingCapacity(maxCovid);
             updateRoom.setType(type);
+            session.update(updateRoom);
+            session.getTransaction().commit();
             System.out.println("Updated details.");
 
         } catch (HibernateException e) {
