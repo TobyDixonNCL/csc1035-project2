@@ -3,7 +3,9 @@ package csc1035.project2;
 import javax.persistence.*;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -127,5 +129,12 @@ public class Bookings {
     public String confirmation() {
         String f = "BookingID: " + this.getBookingID() + "\nTime: " + this.getTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) + "\nDuration: " + this.getDuration();
         return f;
+    }
+    public List<Rooms> availableRooms() {
+        List<Rooms> available = new ArrayList<>();
+        IController<Rooms> controllerObject = new Controller<>();
+        Rooms f = controllerObject.readById(Rooms.class, this.rooms.getRoomID(), true);
+
+        return available;
     }
 }
