@@ -1,13 +1,14 @@
 package csc1035.project2;
 
+import java.time.LocalDateTime;
+
 public class Main {
     public static void main(String[] args) {
 
-        Student student = new Student();
-        Timetable test = new Timetable(student, false);
+        Timetable test = new Timetable();
+        LocalDateTime time1 = LocalDateTime.of(2020, 9, 21, 10, 00);
+        LocalDateTime time2 = LocalDateTime.of(2021, 7, 21, 10, 00);
 
-        for (Bookings b: test.bookings){
-            System.out.println(b);
-        }
+        test.getAdminTimetable(time1, time2);
     }
 }
