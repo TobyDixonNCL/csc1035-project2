@@ -154,31 +154,4 @@ public class Timetable {
         this.bookings = list;
 
     }
-
-    public void bookRoom(){
-
-        /*
-        This method should check availability for a booking, and add it to the
-        database and the local list of bookings.
-            Need:
-                - Booking ID
-                - Duration
-                - Module ID
-                - Room ID
-                - Socially Distanced?
-                - Time
-
-            Check if room is booked
-            if not then add room booking to database
-         */
-
-        Session s = HibernateUtil.getSessionFactory().openSession();
-        s.beginTransaction();
-
-        Query moduleQuery = s.createSQLQuery("select * from Bookings");
-
-        s.close();
-}
-
-
 }
