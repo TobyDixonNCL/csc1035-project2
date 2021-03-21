@@ -118,6 +118,7 @@ public class Timetable {
      *
      * @param yearBegin - This is a LocalDateTime object that represents the start of the school year in question.
      * @param yearEnd - This is a LocalDateTime object that represents the end of the school year in question.
+     * @param sociallyDistanced - This is a boolean value that tells the method whether or not the timetable should be socially distanced.
      */
 
     public void getAdminTimetable(LocalDateTime yearBegin, LocalDateTime yearEnd, boolean sociallyDistanced){
