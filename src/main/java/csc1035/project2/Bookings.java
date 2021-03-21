@@ -122,7 +122,7 @@ public class Bookings {
     }
 
     /**
-     *Method to format the data for proper use in the confirmation
+     * Method to format the data for proper use in the confirmation
      * @Author Jake Wilson
      */
     //Formats all the information so it is ready to be returned in an easily readable way
@@ -130,11 +130,22 @@ public class Bookings {
         String f = "BookingID: " + this.getBookingID() + "\nTime: " + this.getTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) + "\nDuration: " + this.getDuration();
         return f;
     }
-    public List<Rooms> availableRooms() {
-        List<Rooms> available = new ArrayList<>();
-        IController<Rooms> controllerObject = new Controller<>();
-        Rooms f = controllerObject.readById(Rooms.class, this.rooms.getRoomID(), true);
 
+    /**
+     * Method to return list of rooms available to a given booking
+     * @param booking the booking needing to be checked for available rooms
+     * @return list of all rooms available for the given booking time
+     */
+    public List<Rooms> availableRooms(Bookings booking) {
+        List<Rooms> available = new ArrayList<>();
+        IController<Rooms> controllerObjectRooms = new Controller<>();
+        IController<Bookings> controllerObjectBookings = new Controller<>();
+        Rooms f = controllerObjectRooms.readById(Rooms.class, this.rooms.getRoomID(), true);
+        while(f!=null) {
+            if (conflictsWith(booking)==false){
+                available.add(f);
+            }
+        }
         return available;
     }
 }
