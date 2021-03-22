@@ -1,0 +1,11 @@
+room_number,type,max_capacity,social_distancing_capacity
+0.379,PC Cluster,157,36
+0.365,PC Cluster,59,9
+1.846,Lecture Lecture,274,50
+1.862,Seminar Room,70,31
+2.484,Seminar Room,84,35
+2.019,Meeting Room,20,13
+3.473,Meeting Room,19,8
+3.940,Lecture Lecture,53,31
+4.178,Seminar Room,61,30
+4.550,Seminar Room,91,4
