@@ -206,7 +206,7 @@ public class Menu {
      */
     static void listMenu(BufferedReader consoleReader) throws IOException {
 
-        System.out.printf("%n1: Output all rooms%n2: Output all students%n3: Output all staff%n 4: Output all modules%n 5: Return to main menu");
+        System.out.printf("%n1: Output all rooms%n2: Output all students that take a module%n3: Output all staff that teach a module%n4: Output requirements for all modules%n5: Return to main menu");
         int choice = 0;
         while (choice != 5) {
             // regexChoice is used to check that the string is numbers only
@@ -228,16 +228,13 @@ public class Menu {
                         }
                         break;
                     case 2:
-                        //produce individual timetable
+
                         break;
                     case 3:
-                        //exit program
-                        //doesn't need a command; the program reaches the end and exits automatically
-                        //once this loop ends.
+
                         break;
                     case 4:
                         break;
-
                     case 5:
                         break;
                     default:
@@ -249,7 +246,7 @@ public class Menu {
             //when returning to timetable menu, display choices again.
             if (choice > 0 && choice < 6) {
                 System.out.println("Returned to List menu.");
-                System.out.printf("%n1: Output all rooms%n2: Output all students%n3: Output all staff%n 4: Output all modules%n 5: Return to main menu");
+                System.out.printf("%n1: Output all rooms%n2: Output all students that take a module%n3: Output all staff that teach a module%n 4: Return to main menu");
             }
         }
     }
