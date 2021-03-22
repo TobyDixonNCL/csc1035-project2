@@ -20,7 +20,7 @@ public class Menu {
 
         //prints a welcome message and instructions for the user.
         System.out.printf("%nNUC TIMETABLE SYSTEM%n===============%nMake A Selection:");
-        System.out.printf("%n1: Room Booking System%n2: Timetable System%n3: Exit program%n");
+        System.out.printf("%n1: Room Booking System%n2: Timetable System%n3:List all rooms/students/staff/modules.%nExit program%n");
 
         //Gets user choice, uses a while loop and a case switch.
         //If the user does not select one of the valid options (default case), shows an error message and returns to the start
@@ -35,7 +35,8 @@ public class Menu {
                 choice = Integer.parseInt(consoleReader.readLine());
                 //1: Room Booking System
                 //2: Timetabling System
-                //3: end program
+                //3: List database
+                //4: end program
                 switch (choice) {
                     case 1:
                         BookingMenu(consoleReader);
@@ -44,6 +45,9 @@ public class Menu {
                         TimetableMenu(consoleReader);
                         break;
                     case 3:
+                        listMenu(consoleReader);
+                        break;
+                    case 4:
                         //exit program
                         //doesn't need a command; the program reaches the end and exits automatically
                         //once this loop ends.
@@ -55,8 +59,8 @@ public class Menu {
                 System.out.println("Invalid input; input valid choice.");
             }
             //when returning to main menu, display choices again.
-            if (choice == 1 || choice == 2) {
-                System.out.printf("%nReturned to main menu.%n1:Room Booking System%n2:Timetabling System%n3:Exit%n");
+            if (choice == 1 || choice == 2 || choice == 3) {
+                System.out.printf("%nReturned to main menu.%n1:Room Booking System%n2:Timetabling System%n3:List all rooms/students/staff/modules.4:Exit%n");
             }
         }
     }
@@ -193,36 +197,46 @@ public class Menu {
                 System.out.printf("1: Create timetable and book relevant rooms for the school%n2: Produce timetable for a staff member or student%n3: Return to main menu%n");
             }
         }
-
     }
-    static void DisplayMenu(BufferedReader consoleReader) throws IOException {
-        System.out.printf("%n1: List of all students%n2: List of all staff%n3: List of all module requirements%n");
-        System.out.printf("%n4: Return to main menu.%n");
+
+    /**
+     * Opens menu to read from the database.
+     * @param consoleReader Reader for the console.
+     * @throws IOException In the event of invalid input.
+     */
+    static void listMenu(BufferedReader consoleReader) throws IOException {
+
+        System.out.printf("%n1: Output all rooms%n2: Output all students that take a module%n3: Output all staff that teach a module%n4: Output requirements for all modules%n5: Return to main menu");
         int choice = 0;
-        while (choice != 3) {
+        while (choice != 5) {
             // regexChoice is used to check that the string is numbers only
             String regexChoice = Integer.toString(choice);
-            if (regexChoice.matches("^[0-9]$")) {
+            if (regexChoice.matches("^[0-5]$")) {
                 //Parses user input as an integer. May need validation for catching non-integer inputs.
                 choice = Integer.parseInt(consoleReader.readLine());
-                //1: List all students
-                //2: List all staff
-                //3: List all module requirements
-                //4: end program
+                //1: All rooms
+                //2: All students
+                //3: All staff
+                //4: All modules
+                //5: end program
                 switch (choice) {
                     case 1:
-                        //List students
+                        IController<Rooms> roomsIController = new Controller<>();
+
+                        for (Rooms room : roomsIController.readAll(Rooms.class)) {
+                            System.out.printf("%s: %s of capacity %d (socially distanced: %d)\n", room.getRoomID(), room.getType(), room.getMaxCapacity(), room.getSocialDistancingCapacity());
+                        }
                         break;
                     case 2:
-                        //List staff
+
                         break;
                     case 3:
-                        //List module requirements
+
                         break;
                     case 4:
-                        //exit program
-                        //doesn't need a command; the program reaches the end and exits automatically
-                        //once this loop ends.
+                        break;
+                    case 5:
+                        break;
                     default:
                         System.out.println("Invalid input; input valid choice.");
                 }
@@ -231,9 +245,8 @@ public class Menu {
             }
             //when returning to timetable menu, display choices again.
             if (choice > 0 && choice < 6) {
-                System.out.println("Returned to menu.");
-                System.out.printf("%n1: List of all students%n2: List of all staff%n3: List of all module requirements%n");
-                System.out.printf("%n4: Return to main menu.%n");
+                System.out.println("Returned to List menu.");
+                System.out.printf("%n1: Output all rooms%n2: Output all students that take a module%n3: Output all staff that teach a module%n 4: Return to main menu");
             }
         }
     }
