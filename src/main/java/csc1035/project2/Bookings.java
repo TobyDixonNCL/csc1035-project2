@@ -142,6 +142,7 @@ public class Bookings {
         IController<Bookings> controllerObjectBookings = new Controller<>();
         Rooms f = controllerObjectRooms.readById(Rooms.class, this.rooms.getRoomID(), true);
         while(f!=null) {
+            f = controllerObjectRooms.readById(Rooms.class, this.rooms.getRoomID(), true);
             if (conflictsWith(booking)==false){
                 available.add(f);
             }
