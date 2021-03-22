@@ -6,47 +6,48 @@ import org.hibernate.query.Query;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 /**
- * This class represents the Staff table in the database, it establishes a many to many relationship to the School table.
+ * This class represents the students table in the database. It establishes a many to many relationship with the School class.
  * Objects of this class represent a row in the table.
  */
 @Entity
-@Table(name = "Staff")
-public class Staff {
-    // Constructors
-    public Staff() { }
+@Table(name = "Students")
+public class Students {
+    // Constructor
+    public Students() { }
 
-    public Staff(String staffID, String firstname, String surname) {
-        this.staffID = staffID;
+    public Students(String studentID, String firstname, String surname) {
+        this.studentID = studentID;
         this.firstname = firstname;
         this.surname = surname;
     }
 
-    // Getters and setters
+    // Columns
     @Id
-    @Column(name = "StaffID", length = 10)
-    private String staffID;
+    @Column(name = "StudentID", length = 9)
+    private String studentID;
 
-    @Column(name = "Firstname")
+    @Column(name = "firstname")
     private String firstname;
 
-    @Column(name = "Surname")
+    @Column(name = "surname")
     private String surname;
 
     // Relationships
-    @ManyToMany(mappedBy="staff")
-    private Set<Modules> modules;
+    @ManyToMany(mappedBy = "students")
+    private Set<Modules> modules = new HashSet<>();
 
     // Getters and setters
-    public String getStaffID() {
-        return staffID;
+    public void setStudentID(String studentID) {
+        this.studentID = studentID;
     }
 
-    public void setStaffID(String staffID) {
-        this.staffID = staffID;
+    public String getStudentID() {
+        return studentID;
     }
 
     public String getFirstname() {
@@ -74,7 +75,7 @@ public class Staff {
     }
 
     /**
-     * This method checks whether a staff member is in a booking at a given time.
+     * This method checks whether a student is in a booking at a given time.
      * @param from the beginning of the period of time being checked.
      * @param to the end of the period of time being checked.
      * @return true if the room is available in the given time frame, false if otherwise.
@@ -83,10 +84,10 @@ public class Staff {
         Session s = HibernateUtil.getSessionFactory().openSession();
 
         // Get all of the staff member's bookings
-        String sqlString = "SELECT b.time, b.duration FROM Staff s INNER JOIN s.modules m INNER JOIN m.bookings b WHERE s.staffID = :staffID";
+        String sqlString = "SELECT b.time, b.duration FROM Students s INNER JOIN s.modules m INNER JOIN m.bookings b WHERE s.studentID = :studentID";
 
         Query<?> q = s.createQuery(sqlString);
-        q.setParameter("staffID", staffID);
+        q.setParameter("studentID", studentID);
         List<?> results = q.getResultList();
 
         s.close();
