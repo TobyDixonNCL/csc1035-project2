@@ -14,7 +14,6 @@ import java.util.*;
 
 /**
  * This class is a generic controller for the table classes.
- * @see <a href="https://nucode.ncl.ac.uk/scomp/stage1/csc1035/code-examples/part-2/csc1035-hibernate-examples/blob/master/src/main/java/controller/Controller.java">(Uses code from this lecture, Jordan Barnes, 2020)</a>
  * @param <E> The hibernate class which is being interacted with.
  */
 public class Controller<E> implements IController<E> {
@@ -178,13 +177,6 @@ public class Controller<E> implements IController<E> {
         return entry;
     }
 
-    /**
-     * Lazily reads all the rows from a table represented by class c.
-     * Use this method when you do not want to make use of the relationships of the table.
-     * Usage: controllerObject.readAll(Class);
-     * @param c The class which represents the table which is being read from.
-     * @return A list of objects representing rows in the table `c`.
-     */
     @Override
     public List<E> readAll(Class<E> c) {
         List<E> entries = null;
@@ -209,14 +201,6 @@ public class Controller<E> implements IController<E> {
 
         return entries;
     }
-
-    /**
-     * Eagerly reads all the rows from a table represented by class c.
-     * Use this method when you want to make use of the relationships of the table.
-     * Usage: controllerObject.readAll(Class, true);
-     * @param c The class which represents the table which is being read from.
-     * @return A list of objects representing rows in the table `c`.
-     */
     @Override
     public List<E> readAll(Class<E> c, boolean eager) {
         // If user wants to read table lazily, use existing function.
@@ -271,8 +255,6 @@ public class Controller<E> implements IController<E> {
     /**
      * This will delete a specified row from the specified table.
      * Usage: controllerObject.delete(Class, "id_to_delete");
-     * @param c The table which is being deleted from.
-     * @param id The id of the row which is being deleted.
      */
     @Override
     public void delete(Class<E> c, String id) {
