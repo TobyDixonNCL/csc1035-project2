@@ -195,4 +195,46 @@ public class Menu {
         }
 
     }
+    static void DisplayMenu(BufferedReader consoleReader) throws IOException {
+        System.out.printf("%n1: List of all students%n2: List of all staff%n3: List of all module requirements%n");
+        System.out.printf("%n4: Return to main menu.%n");
+        int choice = 0;
+        while (choice != 3) {
+            // regexChoice is used to check that the string is numbers only
+            String regexChoice = Integer.toString(choice);
+            if (regexChoice.matches("^[0-9]$")) {
+                //Parses user input as an integer. May need validation for catching non-integer inputs.
+                choice = Integer.parseInt(consoleReader.readLine());
+                //1: List all students
+                //2: List all staff
+                //3: List all module requirements
+                //4: end program
+                switch (choice) {
+                    case 1:
+                        //List students
+                        break;
+                    case 2:
+                        //List staff
+                        break;
+                    case 3:
+                        //List module requirements
+                        break;
+                    case 4:
+                        //exit program
+                        //doesn't need a command; the program reaches the end and exits automatically
+                        //once this loop ends.
+                    default:
+                        System.out.println("Invalid input; input valid choice.");
+                }
+            } else {
+                System.out.println("Invalid input; input valid choice.");
+            }
+            //when returning to timetable menu, display choices again.
+            if (choice > 0 && choice < 6) {
+                System.out.println("Returned to menu.");
+                System.out.printf("%n1: List of all students%n2: List of all staff%n3: List of all module requirements%n");
+                System.out.printf("%n4: Return to main menu.%n");
+            }
+        }
+    }
 }
