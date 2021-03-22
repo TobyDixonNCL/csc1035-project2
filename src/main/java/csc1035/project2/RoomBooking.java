@@ -31,8 +31,6 @@ public class RoomBooking {
                 System.out.println("Booking " + x.getBookingID() + " on " + x.getTime() + " for " + x.getDuration());
             }
         }
-
-
     }
 
 
@@ -55,13 +53,26 @@ public class RoomBooking {
 
             //get row with same ID from Rooms table
             Rooms updateRoom = (session.get(Rooms.class, ID));
-            //set the new values
-            updateRoom.setMaxCapacity(maxNormal);
-            updateRoom.setSocialDistancingCapacity(maxCovid);
-            updateRoom.setType(type);
-            session.update(updateRoom);
-            session.getTransaction().commit();
-            System.out.println("Updated details.");
+
+            //if ID not present, instead makes a new record
+            if (updateRoom != null)
+            {
+                //set the new values
+                updateRoom.setMaxCapacity(maxNormal);
+                updateRoom.setSocialDistancingCapacity(maxCovid);
+                updateRoom.setType(type);
+                session.update(updateRoom);
+                session.getTransaction().commit();
+                System.out.println("Updated details.");
+            }
+            else
+            {
+                Rooms addRoom = new Rooms(ID, type, maxNormal, maxCovid);
+                session.save(addRoom);
+                session.getTransaction().commit();
+                System.out.println("Added new room.");
+            }
+
 
         } catch (HibernateException e) {
             if (session!=null) session.getTransaction().rollback();
